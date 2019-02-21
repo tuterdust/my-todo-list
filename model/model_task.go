@@ -5,6 +5,7 @@ import "time"
 // Task is a struct representing a task of TODO list
 type Task struct {
 	ID          int       `db:"id" json:"task_id"`
+	ListID      int       `db:"list_id" json:"-"`
 	Name        string    `db:"name" json:"task_name"`
 	Description string    `db:"description" json:"description"`
 	Done        bool      `db:"done" json:"done"`

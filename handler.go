@@ -15,14 +15,19 @@ func getAllToDoListHandler(c *gin.Context) {
 
 func getAllTaskInToDoListHandler(c *gin.Context) {
 	allTask := make([]*model.Task, 0)
-	if err := dbManager.FetchAllTask(&allTask); err != nil {
+	listID, err := strconv.Atoi(c.Params.ByName("listID"))
+	if err != nil {
+		c.JSON(http.StatusBadGateway, gin.H{"error": err.Error()})
+		return
+
+	}
+
+	if err := dbManager.FetchAllTask(listID, &allTask); err != nil {
 		c.JSON(http.StatusBadGateway, gin.H{"error": err.Error()})
 		return
 	}
-	listID := c.Params.ByName("listID")
 	c.JSON(http.StatusOK, gin.H{
-		"list_id": listID,
-		"tasks":   allTask})
+		"tasks": allTask})
 }
 
 func getTaskInToDoListHandler(c *gin.Context) {
@@ -32,7 +37,13 @@ func getTaskInToDoListHandler(c *gin.Context) {
 		c.JSON(http.StatusBadGateway, gin.H{"error": err.Error()})
 		return
 	}
-	if err := dbManager.FetchTaskFromID(taskID, task); err != nil {
+	listID, err := strconv.Atoi(c.Params.ByName("listID"))
+	if err != nil {
+		c.JSON(http.StatusBadGateway, gin.H{"error": err.Error()})
+		return
+	}
+
+	if err := dbManager.FetchTaskFromID(taskID, listID, task); err != nil {
 		c.JSON(http.StatusBadGateway, gin.H{"error": err.Error()})
 		return
 	}
