@@ -13,6 +13,7 @@ func setupRouter() *gin.Engine {
 	r := gin.Default()
 
 	r.GET("/list", getAllToDoListHandler)
+	r.GET("/list/:listID", getAllTaskInToDoListHandler)
 
 	// Get user value
 	r.GET("/user/:name", func(c *gin.Context) {
