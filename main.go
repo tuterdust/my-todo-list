@@ -11,9 +11,11 @@ func setupRouter() *gin.Engine {
 
 	r := gin.Default()
 
+	r.POST("/list", createToDoListHandler)
+	r.POST("/task", createTaskHandler)
 	r.GET("/list", getAllToDoListHandler)
-	r.GET("/list/:listID", getAllTaskInToDoListHandler)
-	r.GET("/list/:listID/:taskID", getTaskInToDoListHandler)
+	r.GET("/list/:listID/:tID", getTaskInToDoListHandler)
+	r.GET("/list/:listID", getToDoListHandler)
 
 	return r
 }

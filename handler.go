@@ -9,8 +9,39 @@ import (
 )
 
 func getAllToDoListHandler(c *gin.Context) {
-	allList := model.NewList()
-	c.JSON(http.StatusOK, gin.H{"list": allList})
+	allList := make([]*model.List, 0)
+	if err := dbManager.FetchAllList(&allList); err != nil {
+		c.JSON(http.StatusBadGateway, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"lists": allList})
+}
+
+func getToDoListHandler(c *gin.Context) {
+	list := model.NewList()
+	listID, err := strconv.Atoi(c.Params.ByName("listID"))
+	if err != nil {
+		c.JSON(http.StatusBadGateway, gin.H{"error": err.Error()})
+		return
+	}
+	isDetailed, err := strconv.ParseBool(c.Query("detailed"))
+	if err != nil {
+		isDetailed = false
+	}
+
+	if isDetailed {
+		if err := dbManager.FetchDetailedListByID(listID, list); err != nil {
+			c.JSON(http.StatusBadGateway, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusBadGateway, gin.H{"list": list})
+	} else {
+		if err := dbManager.FetchListInfoByID(listID, list); err != nil {
+			c.JSON(http.StatusBadGateway, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{"list": list})
+	}
 }
 
 func getAllTaskInToDoListHandler(c *gin.Context) {
@@ -32,7 +63,7 @@ func getAllTaskInToDoListHandler(c *gin.Context) {
 
 func getTaskInToDoListHandler(c *gin.Context) {
 	task := model.NewTask()
-	taskID, err := strconv.Atoi(c.Param("taskID"))
+	taskID, err := strconv.Atoi(c.Param("tID"))
 	if err != nil {
 		c.JSON(http.StatusBadGateway, gin.H{"error": err.Error()})
 		return
@@ -48,4 +79,29 @@ func getTaskInToDoListHandler(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"task": task})
+}
+
+func createToDoListHandler(c *gin.Context) {
+	listName := c.DefaultPostForm("name", "Untitled List")
+	owner := c.PostForm("owner")
+	if err := dbManager.CreateNewList(listName, owner); err != nil {
+		c.JSON(http.StatusBadGateway, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"result": "Success"})
+}
+
+func createTaskHandler(c *gin.Context) {
+	listID, err := strconv.Atoi(c.PostForm("listID"))
+	if err != nil {
+		c.JSON(http.StatusBadGateway, gin.H{"error": err.Error()})
+		return
+	}
+	taskName := c.DefaultPostForm("name", "Untitled Task")
+	description := c.DefaultPostForm("description", "")
+	if err := dbManager.CreateNewTask(listID, taskName, description); err != nil {
+		c.JSON(http.StatusBadGateway, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"result": "Success"})
 }
