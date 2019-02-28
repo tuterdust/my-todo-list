@@ -51,9 +51,29 @@ func (dbManager *DBManager) CreateNewList(
 	s := `INSERT INTO "public"."list" ("name", "owner")
 		  	VALUES ($1, $2);`
 	row, err := dbManager.db.Query(s, listName, owner)
-	defer row.Close()
 	if err != nil {
 		return err
 	}
+	defer row.Close()
+	return nil
+}
+
+// UpdateList updates the list record in the database
+func (dbManager *DBManager) UpdateList(
+	newName, newOwner string,
+	listID int) error {
+	s := `	UPDATE
+				"public"."list"
+			SET
+				"name" = $1,
+				"owner" = $2,
+				"updated_at" = NOW()
+			WHERE
+				"id" = $3;`
+	row, err := dbManager.db.Query(s, newName, newOwner, listID)
+	if err != nil {
+		return err
+	}
+	defer row.Close()
 	return nil
 }

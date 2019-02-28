@@ -63,7 +63,7 @@ func getAllTaskInToDoListHandler(c *gin.Context) {
 
 func getTaskInToDoListHandler(c *gin.Context) {
 	task := model.NewTask()
-	taskID, err := strconv.Atoi(c.Param("tID"))
+	taskID, err := strconv.Atoi(c.Param("taskID"))
 	if err != nil {
 		c.JSON(http.StatusBadGateway, gin.H{"error": err.Error()})
 		return
@@ -103,5 +103,58 @@ func createTaskHandler(c *gin.Context) {
 		c.JSON(http.StatusBadGateway, gin.H{"error": err.Error()})
 		return
 	}
+	c.JSON(http.StatusOK, gin.H{"result": "Success"})
+}
+
+func updateListHandler(c *gin.Context) {
+	listID, err := strconv.Atoi(c.PostForm("listID"))
+	if err != nil {
+		c.JSON(http.StatusBadGateway, gin.H{"error": err.Error()})
+		return
+	}
+
+	newName := c.DefaultPostForm("name", "Untitled Task")
+	newOwner := c.DefaultPostForm("owner", "")
+
+	if err := dbManager.UpdateList(newName, newOwner, listID); err != nil {
+		c.JSON(http.StatusBadGateway, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"result": "Success"})
+}
+
+func updateTaskHandler(c *gin.Context) {
+	listID, err := strconv.Atoi(c.PostForm("listID"))
+	if err != nil {
+		c.JSON(http.StatusBadGateway, gin.H{"error": err.Error()})
+		return
+	}
+
+	taskID, err := strconv.Atoi(c.PostForm("taskID"))
+	if err != nil {
+		c.JSON(http.StatusBadGateway, gin.H{"error": err.Error()})
+		return
+	}
+
+	status, err := strconv.ParseBool(c.PostForm("status"))
+	if err != nil {
+		c.JSON(http.StatusBadGateway, gin.H{"error": err.Error()})
+		return
+	}
+	newName := c.DefaultPostForm("name", "Untitled Task")
+	newDescription := c.DefaultPostForm("description", "")
+
+	list := model.NewList()
+	if err := dbManager.FetchListInfoByID(listID, list); err != nil {
+		c.JSON(http.StatusBadGateway, gin.H{"error": err.Error()})
+		return
+	}
+
+	if err := dbManager.UpdateTask(newName, newDescription, status, listID, taskID); err != nil {
+		c.JSON(http.StatusBadGateway, gin.H{"error": err.Error()})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{"result": "Success"})
 }

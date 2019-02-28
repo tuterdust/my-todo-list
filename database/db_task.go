@@ -36,9 +36,32 @@ func (dbManager *DBManager) CreateNewTask(
 	s := `	INSERT INTO "public"."task" ("list_id", "name" , "description")
 				VALUES ($1, $2 , $3);`
 	row, err := dbManager.db.Query(s, listID, name, description)
-	defer row.Close()
 	if err != nil {
 		return err
 	}
+	defer row.Close()
+	return nil
+}
+
+// UpdateTask updates the task record in the database
+func (dbManager *DBManager) UpdateTask(
+	newName, newDescription string,
+	status bool,
+	listID, taskID int) error {
+	s := `	UPDATE
+				"public"."task"
+			SET
+				"name" = $1,
+				"description" = $2,
+				"done" = $3,
+				"list_id" = $4,
+				"updated_at" = NOW()
+			WHERE
+				"id" = $5;`
+	row, err := dbManager.db.Query(s, newName, newDescription, status, listID, taskID)
+	if err != nil {
+		return err
+	}
+	defer row.Close()
 	return nil
 }
