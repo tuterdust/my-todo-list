@@ -13,6 +13,7 @@ import (
 func getAllToDoListHandler(c *gin.Context) {
 	allList := make([]*model.List, 0)
 	if err := dbManager.FetchAllList(&allList); err != nil {
+		logger.Println(err.Error())
 		c.JSON(http.StatusBadGateway, gin.H{"error": err.Error()})
 		return
 	}
@@ -30,12 +31,14 @@ func getToDoListHandler(c *gin.Context) {
 
 	if isDetailed {
 		if err := dbManager.FetchDetailedListByID(listUUID, list); err != nil {
+			logger.Println(err.Error())
 			c.JSON(http.StatusBadGateway, gin.H{"error": err.Error()})
 			return
 		}
 		c.JSON(http.StatusBadGateway, gin.H{"list": list})
 	} else {
 		if err := dbManager.FetchListInfoByID(listUUID, list); err != nil {
+			logger.Println(err.Error())
 			c.JSON(http.StatusBadGateway, gin.H{"error": err.Error()})
 			return
 		}
@@ -48,6 +51,7 @@ func getAllTaskInToDoListHandler(c *gin.Context) {
 	listUUID := uuid.FromStringOrNil(c.Params.ByName("listUUID"))
 
 	if err := dbManager.FetchAllTask(listUUID, &allTask); err != nil {
+		logger.Println(err.Error())
 		c.JSON(http.StatusBadGateway, gin.H{"error": err.Error()})
 		return
 	}
@@ -61,6 +65,7 @@ func getTaskInToDoListHandler(c *gin.Context) {
 	listUUID := uuid.FromStringOrNil(c.Params.ByName("listUUID"))
 
 	if err := dbManager.FetchTaskFromID(taskUUID, listUUID, task); err != nil {
+		logger.Println(err.Error())
 		c.JSON(http.StatusBadGateway, gin.H{"error": err.Error()})
 		return
 	}
@@ -71,6 +76,7 @@ func createToDoListHandler(c *gin.Context) {
 	listName := c.DefaultPostForm("name", "Untitled List")
 	owner := c.PostForm("owner")
 	if err := dbManager.CreateNewList(listName, owner); err != nil {
+		logger.Println(err.Error())
 		c.JSON(http.StatusBadGateway, gin.H{"error": err.Error()})
 		return
 	}
@@ -83,6 +89,7 @@ func createTaskHandler(c *gin.Context) {
 	taskName := c.DefaultPostForm("name", "Untitled Task")
 	description := c.DefaultPostForm("description", "")
 	if err := dbManager.CreateNewTask(listUUID, taskName, description); err != nil {
+		logger.Println(err.Error())
 		c.JSON(http.StatusBadGateway, gin.H{"error": err.Error()})
 		return
 	}
@@ -96,6 +103,7 @@ func updateListHandler(c *gin.Context) {
 	newOwner := c.DefaultPostForm("owner", "")
 
 	if err := dbManager.UpdateList(newName, newOwner, listUUID); err != nil {
+		logger.Println(err.Error())
 		c.JSON(http.StatusBadGateway, gin.H{"error": err.Error()})
 		return
 	}
@@ -109,6 +117,7 @@ func updateTaskHandler(c *gin.Context) {
 
 	status, err := strconv.ParseBool(c.PostForm("status"))
 	if err != nil {
+		logger.Println(err.Error())
 		c.JSON(http.StatusBadGateway, gin.H{"error": err.Error()})
 		return
 	}
@@ -116,6 +125,7 @@ func updateTaskHandler(c *gin.Context) {
 	newDescription := c.DefaultPostForm("description", "")
 
 	if err := dbManager.UpdateTask(newName, newDescription, status, listUUID, taskUUID); err != nil {
+		logger.Println(err.Error())
 		c.JSON(http.StatusBadGateway, gin.H{"error": err.Error()})
 		return
 	}
@@ -127,11 +137,13 @@ func deleteListHandler(c *gin.Context) {
 	listUUID := uuid.FromStringOrNil(c.Param("listUUID"))
 
 	if err := dbManager.DeleteListUUIDFromTask(listUUID); err != nil {
+		logger.Println(err.Error())
 		c.JSON(http.StatusBadGateway, gin.H{"error": err.Error()})
 		return
 	}
 
 	if err := dbManager.DeleteList(listUUID); err != nil {
+		logger.Println(err.Error())
 		c.JSON(http.StatusBadGateway, gin.H{"error": err.Error()})
 		return
 	}
@@ -142,6 +154,7 @@ func deleteTaskHandler(c *gin.Context) {
 	taskUUID := uuid.FromStringOrNil(c.Param("taskUUID"))
 
 	if err := dbManager.DeleteTask(taskUUID); err != nil {
+		logger.Println(err.Error())
 		c.JSON(http.StatusBadGateway, gin.H{"error": err.Error()})
 		return
 	}

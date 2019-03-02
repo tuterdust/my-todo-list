@@ -1,11 +1,18 @@
 package main
 
 import (
+	"io"
+	"log"
+	"os"
+
 	"github.com/gin-gonic/gin"
 	"github.com/tuterdust/my-todo-list/database"
 )
 
-var dbManager *database.DBManager
+var (
+	dbManager *database.DBManager
+	logger    *log.Logger
+)
 
 func setupRouter() *gin.Engine {
 
@@ -25,8 +32,26 @@ func setupRouter() *gin.Engine {
 }
 
 func main() {
+	setLogFile()
+	setErrorLog()
 	r := setupRouter()
 	dbManager = database.NewDBManager()
 	dbManager.Connect()
 	r.Run(":8080")
+}
+
+func setLogFile() {
+	gin.DisableConsoleColor()
+	f, _ := os.Create("log/gin_info.log")
+	gin.DefaultWriter = io.MultiWriter(f, os.Stdout)
+}
+
+func setErrorLog() {
+	f, err := os.OpenFile("log/error.log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	logger = log.New(f, "API  ", log.LstdFlags)
+	logger.Println("error log works")
 }
