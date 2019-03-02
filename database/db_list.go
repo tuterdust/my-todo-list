@@ -1,6 +1,7 @@
 package database
 
 import (
+	"github.com/satori/go.uuid"
 	"github.com/tuterdust/my-todo-list/model"
 )
 
@@ -17,27 +18,27 @@ func (dbManager *DBManager) FetchAllList(
 
 // FetchListInfoByID fetchs TODO list information(without Task) from the database using list ID
 func (dbManager *DBManager) FetchListInfoByID(
-	id int,
+	listUUID uuid.UUID,
 	list *model.List,
 ) error {
 	s := `	SELECT
 				*
 			FROM
 				"list"
-			WHERE "list"."id" = $1;`
-	return dbManager.db.Get(list, s, id)
+			WHERE "list"."uuid" = $1;`
+	return dbManager.db.Get(list, s, listUUID)
 }
 
 // FetchDetailedListByID fetchs TODO list information (with Task) from the database using list ID
 func (dbManager *DBManager) FetchDetailedListByID(
-	id int,
+	listUUID uuid.UUID,
 	list *model.List,
 ) error {
-	if err := dbManager.FetchListInfoByID(id, list); err != nil {
+	if err := dbManager.FetchListInfoByID(listUUID, list); err != nil {
 		return err
 	}
 	tasks := make([]*model.Task, 0)
-	if err := dbManager.FetchAllTask(id, &tasks); err != nil {
+	if err := dbManager.FetchAllTask(listUUID, &tasks); err != nil {
 		return err
 	}
 	list.Tasks = &tasks
@@ -61,7 +62,8 @@ func (dbManager *DBManager) CreateNewList(
 // UpdateList updates the list record in the database
 func (dbManager *DBManager) UpdateList(
 	newName, newOwner string,
-	listID int) error {
+	listUUID uuid.UUID,
+) error {
 	s := `	UPDATE
 				"public"."list"
 			SET
@@ -69,8 +71,21 @@ func (dbManager *DBManager) UpdateList(
 				"owner" = $2,
 				"updated_at" = NOW()
 			WHERE
-				"id" = $3;`
-	row, err := dbManager.db.Query(s, newName, newOwner, listID)
+				"uuid" = $3;`
+	row, err := dbManager.db.Query(s, newName, newOwner, listUUID)
+	if err != nil {
+		return err
+	}
+	defer row.Close()
+	return nil
+}
+
+// DeleteList deletes a list from the database using list ID
+func (dbManager *DBManager) DeleteList(
+	listID int,
+) error {
+	s := ``
+	row, err := dbManager.db.Query(s, listID)
 	if err != nil {
 		return err
 	}

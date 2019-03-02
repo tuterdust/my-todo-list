@@ -1,10 +1,14 @@
 package model
 
-import "time"
+import (
+	"time"
+
+	"github.com/satori/go.uuid"
+)
 
 // List is a struct representing a TODO list
 type List struct {
-	ID        int       `db:"id" json:"list_id"`
+	UUID      uuid.UUID `db:"uuid" json:"list_uuid"`
 	Name      string    `db:"name" json:"list_name"`
 	Owner     string    `db:"owner" json:"owner"`
 	Tasks     *[]*Task  `json:"tasks"`

@@ -1,14 +1,18 @@
 package model
 
-import "time"
+import (
+	"time"
+
+	"github.com/satori/go.uuid"
+)
 
 // Task is a struct representing a task of TODO list
 type Task struct {
-	ID          int       `db:"id" json:"task_id"`
-	ListID      int       `db:"list_id" json:"-"`
+	UUID        uuid.UUID `db:"uuid" json:"task_uuid"`
+	ListUUID    uuid.UUID `db:"list_uuid" json:"-"`
 	Name        string    `db:"name" json:"task_name"`
 	Description string    `db:"description" json:"description"`
-	Done        bool      `db:"done" json:"done"`
+	Done        bool      `db:"status" json:"done"`
 	CreatedAt   time.Time `db:"created_at" json:"created_at"`
 	UpdatedAt   time.Time `db:"updated_at" json:"updated_at"`
 }
