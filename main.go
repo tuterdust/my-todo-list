@@ -60,5 +60,5 @@ func setErrorLog() {
 	}
 
 	logger = log.New(f, "API  ", log.LstdFlags)
-	logger.Println("error log works")
+	logger.Println("Error log starts")
 }
