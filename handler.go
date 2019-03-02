@@ -124,13 +124,14 @@ func updateTaskHandler(c *gin.Context) {
 }
 
 func deleteListHandler(c *gin.Context) {
-	listID, err := strconv.Atoi(c.PostForm("listID"))
-	if err != nil {
+	listUUID := uuid.FromStringOrNil(c.Param("listUUID"))
+
+	if err := dbManager.DeleteListUUIDFromTask(listUUID); err != nil {
 		c.JSON(http.StatusBadGateway, gin.H{"error": err.Error()})
 		return
 	}
 
-	if err := dbManager.DeleteList(listID); err != nil {
+	if err := dbManager.DeleteList(listUUID); err != nil {
 		c.JSON(http.StatusBadGateway, gin.H{"error": err.Error()})
 		return
 	}
@@ -138,13 +139,9 @@ func deleteListHandler(c *gin.Context) {
 }
 
 func deleteTaskHandler(c *gin.Context) {
-	taskID, err := strconv.Atoi(c.PostForm("taskID"))
-	if err != nil {
-		c.JSON(http.StatusBadGateway, gin.H{"error": err.Error()})
-		return
-	}
+	taskUUID := uuid.FromStringOrNil(c.Param("taskUUID"))
 
-	if err := dbManager.DeleteTask(taskID); err != nil {
+	if err := dbManager.DeleteTask(taskUUID); err != nil {
 		c.JSON(http.StatusBadGateway, gin.H{"error": err.Error()})
 		return
 	}

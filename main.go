@@ -18,8 +18,8 @@ func setupRouter() *gin.Engine {
 	r.POST("/task", createTaskHandler)
 	r.PUT("/list", updateListHandler)
 	r.PUT("/task", updateTaskHandler)
-	r.DELETE("/list", deleteListHandler)
-	r.DELETE("/task", deleteTaskHandler)
+	r.DELETE("/list/:listUUID", deleteListHandler)
+	r.DELETE("/task/:taskUUID", deleteTaskHandler)
 
 	return r
 }

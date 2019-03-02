@@ -82,10 +82,12 @@ func (dbManager *DBManager) UpdateList(
 
 // DeleteList deletes a list from the database using list ID
 func (dbManager *DBManager) DeleteList(
-	listID int,
+	listUUID uuid.UUID,
 ) error {
-	s := ``
-	row, err := dbManager.db.Query(s, listID)
+	// delete list
+	s := `	DELETE FROM "public"."list"
+				WHERE "uuid" = $1;`
+	row, err := dbManager.db.Query(s, listUUID)
 	if err != nil {
 		return err
 	}

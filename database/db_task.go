@@ -71,10 +71,29 @@ func (dbManager *DBManager) UpdateTask(
 
 // DeleteTask deletes a task from the database using task ID
 func (dbManager *DBManager) DeleteTask(
-	taskID int,
+	taskUUID uuid.UUID,
 ) error {
-	s := ``
-	row, err := dbManager.db.Query(s, taskID)
+	s := `	DELETE FROM "public"."task"
+				WHERE "uuid" = $1;`
+	row, err := dbManager.db.Query(s, taskUUID)
+	if err != nil {
+		return err
+	}
+	defer row.Close()
+	return nil
+}
+
+// DeleteListUUIDFromTask sets all matched tasks list_uuid to NULL
+func (dbManager *DBManager) DeleteListUUIDFromTask(
+	listUUID uuid.UUID,
+) error {
+	s := `	UPDATE
+				"public"."task"
+			SET
+				"list_uuid" = NULL
+			WHERE
+				"list_uuid" = $1;`
+	row, err := dbManager.db.Query(s, listUUID)
 	if err != nil {
 		return err
 	}
