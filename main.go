@@ -32,15 +32,22 @@ func setupRouter() *gin.Engine {
 }
 
 func main() {
-	setLogFile()
-	setErrorLog()
+	setLogFiles()
 	r := setupRouter()
 	dbManager = database.NewDBManager()
 	dbManager.Connect()
 	r.Run(":8080")
 }
 
-func setLogFile() {
+func setLogFiles() {
+	if _, err := os.Stat("log"); os.IsNotExist(err) {
+		os.Mkdir("log", os.ModePerm)
+	}
+	setGinLog()
+	setErrorLog()
+}
+
+func setGinLog() {
 	gin.DisableConsoleColor()
 	f, _ := os.Create("log/gin_info.log")
 	gin.DefaultWriter = io.MultiWriter(f, os.Stdout)
