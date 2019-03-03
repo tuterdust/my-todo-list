@@ -17,3 +17,6 @@
 
 # Log
 **/log
+
+# ENV
+.envrc
