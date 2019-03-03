@@ -14,6 +14,8 @@ var (
 	logger    *log.Logger
 )
 
+var rootDirPath = os.Getenv("GOPATH") + "/src/github.com/tuterdust/my-todo-list"
+
 func setupRouter() *gin.Engine {
 
 	r := gin.Default()
@@ -40,8 +42,8 @@ func main() {
 }
 
 func setLogFiles() {
-	if _, err := os.Stat("../log"); os.IsNotExist(err) {
-		os.Mkdir("../log", os.ModePerm)
+	if _, err := os.Stat(rootDirPath + "/log"); os.IsNotExist(err) {
+		os.Mkdir(rootDirPath+"/log", os.ModePerm)
 	}
 	setGinLog()
 	setErrorLog()
@@ -49,12 +51,12 @@ func setLogFiles() {
 
 func setGinLog() {
 	gin.DisableConsoleColor()
-	f, _ := os.Create("../log/gin_info.log")
+	f, _ := os.Create(rootDirPath + "/log/gin_info.log")
 	gin.DefaultWriter = io.MultiWriter(f, os.Stdout)
 }
 
 func setErrorLog() {
-	f, err := os.OpenFile("../log/error.log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
+	f, err := os.OpenFile(rootDirPath+"/log/error.log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
 	if err != nil {
 		log.Fatal(err)
 	}
