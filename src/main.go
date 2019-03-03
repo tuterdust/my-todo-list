@@ -14,7 +14,7 @@ var (
 	logger    *log.Logger
 )
 
-var rootDirPath = os.Getenv("GOPATH") + "/src/github.com/tuterdust/my-todo-list"
+var rootDirPath = os.Getenv("GOPATH") + os.Getenv("PROJECT_PATH")
 
 func setupRouter() *gin.Engine {
 
