@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
-	"github.com/tuterdust/my-todo-list/database"
+	"github.com/tuterdust/my-todo-list/src/database"
 )
 
 var (
@@ -40,8 +40,8 @@ func main() {
 }
 
 func setLogFiles() {
-	if _, err := os.Stat("log"); os.IsNotExist(err) {
-		os.Mkdir("log", os.ModePerm)
+	if _, err := os.Stat("../log"); os.IsNotExist(err) {
+		os.Mkdir("../log", os.ModePerm)
 	}
 	setGinLog()
 	setErrorLog()
@@ -49,12 +49,12 @@ func setLogFiles() {
 
 func setGinLog() {
 	gin.DisableConsoleColor()
-	f, _ := os.Create("log/gin_info.log")
+	f, _ := os.Create("../log/gin_info.log")
 	gin.DefaultWriter = io.MultiWriter(f, os.Stdout)
 }
 
 func setErrorLog() {
-	f, err := os.OpenFile("log/error.log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
+	f, err := os.OpenFile("../log/error.log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
 	if err != nil {
 		log.Fatal(err)
 	}

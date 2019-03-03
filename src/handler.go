@@ -7,7 +7,7 @@ import (
 	"github.com/satori/go.uuid"
 
 	"github.com/gin-gonic/gin"
-	"github.com/tuterdust/my-todo-list/model"
+	"github.com/tuterdust/my-todo-list/src/model"
 )
 
 func getAllToDoListHandler(c *gin.Context) {

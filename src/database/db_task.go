@@ -2,7 +2,7 @@ package database
 
 import (
 	uuid "github.com/satori/go.uuid"
-	"github.com/tuterdust/my-todo-list/model"
+	"github.com/tuterdust/my-todo-list/src/model"
 )
 
 // FetchAllTask fetchs every task in the list from the database
