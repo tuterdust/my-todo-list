@@ -10,6 +10,10 @@ import (
 	"github.com/tuterdust/my-todo-list/src/model"
 )
 
+func pingServiceHandler(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{"message": "pong"})
+}
+
 func getAllToDoListHandler(c *gin.Context) {
 	allList := make([]*model.List, 0)
 	if err := dbManager.FetchAllList(&allList); err != nil {

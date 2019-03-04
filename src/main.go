@@ -20,6 +20,7 @@ func setupRouter() *gin.Engine {
 
 	r := gin.Default()
 
+	r.GET("/ping", pingServiceHandler)
 	r.GET("/list", getAllToDoListHandler)
 	r.GET("/list/:listUUID/:taskUUID", getTaskInToDoListHandler)
 	r.GET("/list/:listUUID", getToDoListHandler)
