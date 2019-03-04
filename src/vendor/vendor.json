@@ -53,10 +53,28 @@
 			"revisionTime": "2018-10-24T16:34:19Z"
 		},
 		{
+			"checksumSHA1": "i2O6Ji8ZL6q+EL+4cu/ftBytqZg=",
+			"path": "github.com/jmoiron/sqlx/reflectx",
+			"revision": "82935fac6c1a317907c8f43ed3f7f85ea844a78b",
+			"revisionTime": "2018-10-24T16:34:19Z"
+		},
+		{
 			"checksumSHA1": "2JH1DF82SAPY1JzD1iG4U7GZUcQ=",
 			"path": "github.com/json-iterator/go",
 			"revision": "5bc93205020f6311d7e4a34f82c5616a18ec35e5",
 			"revisionTime": "2019-02-08T07:56:42Z"
+		},
+		{
+			"checksumSHA1": "xxLSo5tKtXc7jGrR70yoEfza8Cw=",
+			"path": "github.com/lib/pq",
+			"revision": "9eb73efc1fcc404148b56765b0d3f61d9a5ef8ee",
+			"revisionTime": "2018-10-16T16:26:27Z"
+		},
+		{
+			"checksumSHA1": "ATnwV0POluBNQEMjPdylodz0oK0=",
+			"path": "github.com/lib/pq/oid",
+			"revision": "9eb73efc1fcc404148b56765b0d3f61d9a5ef8ee",
+			"revisionTime": "2018-10-16T16:26:27Z"
 		},
 		{
 			"checksumSHA1": "GiVgQkx5acnq+JZtYiuHPlhHoso=",
@@ -75,6 +93,12 @@
 			"path": "github.com/modern-go/reflect2",
 			"revision": "94122c33edd36123c84d5368cfb2b69df93a0ec8",
 			"revisionTime": "2018-07-18T01:23:57Z"
+		},
+		{
+			"checksumSHA1": "Tutue3nEgM/87jitUcYv6ODwyNE=",
+			"path": "github.com/satori/go.uuid",
+			"revision": "b2ce2384e17bbe0c6d34077efa39dbab3e09123b",
+			"revisionTime": "2018-10-28T12:50:25Z"
 		},
 		{
 			"checksumSHA1": "WIhpR3EKGueRSJsYOZ6PIsfL4SI=",
@@ -101,5 +125,5 @@
 			"revisionTime": "2018-11-15T11:05:04Z"
 		}
 	],
-	"rootPath": "github.com/tuterdust/my-todo-list"
+	"rootPath": "github.com/tuterdust/my-todo-list/src"
 }
