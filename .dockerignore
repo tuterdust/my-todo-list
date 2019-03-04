@@ -1,0 +1,7 @@
+# Environment files
+*.envrc
+**/env.list
+
+# Git files
+*.git
+*.gitignore
